@@ -1,9 +1,9 @@
 language: python
 python:
-  - "3.2"
   - "3.3"
+install:
+  - NO_REQUIREMENTS
 env:
   - PYTHONPATH=.
 script: 
-  - pep8
   - python3 tests/group_ips_test.py
