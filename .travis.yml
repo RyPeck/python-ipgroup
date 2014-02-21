@@ -1,8 +1,6 @@
 language: python
 python:
   - "3.3"
-install:
-  - NO_REQUIREMENTS
 env:
   - PYTHONPATH=.
 script: 
