@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import ipaddress
+import random
 import unittest
 
 import groupips.groupips as groupips
@@ -46,6 +47,25 @@ class TestGroupIPs(unittest.TestCase):
                             }
 
         group = groupips.group_IPs(IPs, 24)
+
+        self.assertEqual(expected_results, group)
+
+    def test_group3(self):
+        """ 'Random' test """
+
+        # Small Netblock so we don't do over 2**22 hosts to test with
+        random_cidr = random.randint(22, 30)
+
+        network = ipaddress.IPv4Network(("129.21.0.0/%s" % random_cidr))
+
+        # So out sample size is never bigger than the population of hosts
+        random_int = random.randint(1, 2**(32 - random_cidr - 1))
+
+        IPs = random.sample(set(network.hosts()), random_int)
+
+        expected_results = {("129.21.0.0/%s" % random_cidr): random_int}
+
+        group = groupips.group_IPs(IPs, random_cidr)
 
         self.assertEqual(expected_results, group)
 
