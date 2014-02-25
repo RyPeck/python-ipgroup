@@ -4,7 +4,7 @@ import ipaddress
 import random
 import unittest
 
-import groupips.groupips as groupips
+import groupips
 
 
 class TestGroupIPs(unittest.TestCase):
