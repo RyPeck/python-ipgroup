@@ -33,4 +33,4 @@ Script requires Python 3.3, which is the first version of Python to include the 
 - Read in from CSV File
 - Error Catching based on Input
 - Experiment with different return features
-- - Return `ipaddress` Network objects.
+    - Return `ipaddress` Network objects.
