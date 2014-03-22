@@ -4,10 +4,8 @@ import collections
 import ipaddress
 
 
-def group_IPs(ips, bits):
+def _group_IPs(ip_objs, bits):
     """ Group IPs by the bits that match """
-
-    ip_objs = [ipaddress.IPv4Network(i) for i in ips]
 
     super_nets = set([i.supernet(new_prefix=bits) for i in ip_objs])
 
@@ -22,3 +20,15 @@ def group_IPs(ips, bits):
 
     # Return it to a normal dictionary
     return dict(group)
+
+
+def group_IPv6s(ips, bits):
+    ip_objs = [ipaddress.IPv6Network(i) for i in ips]
+    return _group_IPs(ip_objs, bits)
+
+
+def group_IPv4s(ips, bits):
+    """ Group IPs by the bits that match """
+
+    ip_objs = [ipaddress.IPv4Network(i) for i in ips]
+    return _group_IPs(ip_objs, bits)
