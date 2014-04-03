@@ -38,7 +38,6 @@ def group_IPv4s(ips, bits):
 
 def totalAddresses(ips):
     ips = listify_params(ips)
-    print(ips)
 
     total = 0
 
@@ -50,11 +49,8 @@ def totalAddresses(ips):
         if a.overlaps(b):
             overlapping_bit = True
 
-    print(ips)
-
     if overlapping_bit:
         super_set = set()
-        print(len(super_set))
         for i in ips:
             s = set(list(i.hosts()))
             super_set = super_set.union(s)
