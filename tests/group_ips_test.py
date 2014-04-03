@@ -90,5 +90,53 @@ class TestGroupIPs(unittest.TestCase):
 
         self.assertEqual(expected_results, group)
 
+
+class TestTotalAddresses(unittest.TestCase):
+    """
+    Tests totalAddresses function returns correct number of unique addresses
+    in various scenarios
+    """
+
+    def setUp(self):
+        pass
+
+    def test_total_address1(self):
+        self.assertEqual(8, groupips.totalAddresses("127.0.0.0/29"))
+
+    def test_total_address2(self):
+        total = groupips.totalAddresses(["192.168.1.1/16",
+                                         "127.0.0.0/16",
+                                         ])
+
+        self.assertEqual(2**17, total)
+
+    def test_total_address3(self):
+        total = groupips.totalAddresses(["192.168.1.1/16",
+                                         "127.0.0.0/28"
+                                         ])
+
+        self.assertEqual((2**16 + 2**4), total)
+
+    def test_total_address4(self):
+        total = groupips.totalAddresses(["172.16.0.0/12",
+                                         "172.16.0.0/16",
+                                         ])
+
+        self.assertEqual(2**20, total)
+
+    def test_total_address5(self):
+        total = groupips.totalAddresses(["172.16.0.0/12",
+                                         "172.16.0.0/16",
+                                         ])
+
+        self.assertEqual(2**20, total)
+
+    def test_total_address6(self):
+        total = groupips.totalAddresses(["128.151.2.0/24",
+                                         "128.161.3.0/23",
+                                         ])
+
+        self.assertEqual(2**9, total)
+
 if __name__ == "__main__":
     unittest.main()
