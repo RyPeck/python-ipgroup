@@ -117,23 +117,19 @@ class TestTotalAddresses(unittest.TestCase):
 
         self.assertEqual((2**16 + 2**4), total)
 
+    # Next three all overlap, need to keep the test networks small so we don't
+    # take too long to run the tests, at least until we find a more efficient
+    # way of doing this.
     def test_total_address4(self):
-        total = groupips.totalAddresses(["172.16.0.0/12",
-                                         "172.16.0.0/16",
+        total = groupips.totalAddresses(["128.151.2.0/24",
+                                         "128.151.2.0/30",
                                          ])
 
-        self.assertEqual(2**20, total)
+        self.assertEqual(2**8, total)
 
     def test_total_address5(self):
-        total = groupips.totalAddresses(["172.16.0.0/12",
-                                         "172.16.0.0/16",
-                                         ])
-
-        self.assertEqual(2**20, total)
-
-    def test_total_address6(self):
         total = groupips.totalAddresses(["128.151.2.0/24",
-                                         "128.161.3.0/23",
+                                         "128.151.2.0/23",
                                          ])
 
         self.assertEqual(2**9, total)

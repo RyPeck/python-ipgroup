@@ -3,6 +3,8 @@
 import collections
 import ipaddress
 
+from itertools import combinations
+
 
 def _group_IPs(ip_objs, bits):
     """ Group IPs by the bits that match """
@@ -39,6 +41,26 @@ def totalAddresses(ips):
     print(ips)
 
     total = 0
+
+    overlapping_bit = False
+
+    # Need to check if any of the networks overlap, and use a different method
+    # for getting the number of unique addresses
+    for a, b in combinations(ips, 2):
+        if a.overlaps(b):
+            overlapping_bit = True
+
+    print(ips)
+
+    if overlapping_bit:
+        super_set = set()
+        print(len(super_set))
+        for i in ips:
+            s = set(list(i.hosts()))
+            super_set = super_set.union(s)
+
+        # Return all address... + 2 for non-usable hosts
+        return len(super_set) + 2
 
     for i in ips:
         total += i.num_addresses
