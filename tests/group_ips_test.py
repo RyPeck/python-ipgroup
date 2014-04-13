@@ -134,5 +134,15 @@ class TestTotalAddresses(unittest.TestCase):
 
         self.assertEqual(2**9, total)
 
+    def test_total_address_overlapping(self):
+        """ For the scenario where networks will contain eachother. """
+        total = groupips.totalAddresses(["129.21.0.0/16",
+                                         "129.21.1.0/18",
+                                         "129.21.1.0/24",
+                                         ])
+
+        self.assertEqual(2**16, total)
+
+
 if __name__ == "__main__":
     unittest.main()
