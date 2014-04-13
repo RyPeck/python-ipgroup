@@ -37,6 +37,7 @@ def group_IPv4s(ips, bits):
 
 
 def totalAddresses(ips):
+    """ Returns the number of total unique addresses in a list of networks """
     ips = listify_params(ips)
 
     total = 0

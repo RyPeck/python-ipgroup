@@ -5,7 +5,7 @@ Status](https://travis-ci.org/RyPeck/IP-Grouping-Python.png?branch=master)](http
 
 ## Usage
 
-Script requires Python 3.3, which is the first version of Python to include the [ipaddress manipulation library](http://docs.python.org/3.3/library/ipaddress) in the standard release.
+Script requires Python 3.3 or 3.4, which both include the [ipaddress manipulation library](http://docs.python.org/3.3/library/ipaddress) in the standard release.
 
 ~~~
 >>> import groupips
@@ -25,12 +25,13 @@ Script requires Python 3.3, which is the first version of Python to include the 
  '172.16.0.0/12': 2, 
  '192.160.0.0/12': 2, 
  '8.0.0.0/12': 2}
+>>> 
+>>> total = groupips.totalAddresses(["1.0.0.0/8",
+...                                  "1.0.0.0/4",
+...                                  "2.0.0.0/8",
+...                                  "2.0.0.0/16",
+...                                  "2.1.1.0/24",
+...                                  "1.0.0.0/16",
+>>> total
+268435456
 ~~~
-
-## Next Features to Do
-
-- IPv6 Support
-- Read in from CSV File
-- Error Catching based on Input
-- Experiment with different return features
-    - Return `ipaddress` Network objects.
