@@ -117,9 +117,6 @@ class TestTotalAddresses(unittest.TestCase):
 
         self.assertEqual((2**16 + 2**4), total)
 
-    # Next three all overlap, need to keep the test networks small so we don't
-    # take too long to run the tests, at least until we find a more efficient
-    # way of doing this.
     def test_total_address4(self):
         total = groupips.totalAddresses(["128.151.2.0/24",
                                          "128.151.2.0/30",
@@ -142,6 +139,37 @@ class TestTotalAddresses(unittest.TestCase):
                                          ])
 
         self.assertEqual(2**16, total)
+
+    def test_total_address_overlapping2(self):
+        """ For the scenario where networks will contain eachother, big networks
+        to show that the function is fast, no longer enumerating all networks.
+        """
+        total = groupips.totalAddresses(["1.0.0.0/8",
+                                         "2.0.0.0/8",
+                                         "2.0.0.0/16",
+                                         "2.1.1.0/24",
+                                         "1.0.0.0/16",
+                                         "1.1.1.0/24",
+                                         "2.0.0.0/8",
+                                         ])
+
+        self.assertEqual((2**24 + 2**24), total)
+
+    def test_total_address_overlapping3(self):
+        """ For the scenario where networks will contain eachother, big networks
+        to show that the function is fast, no longer enumerating all networks.
+        """
+        total = groupips.totalAddresses(["1.0.0.0/8",
+                                         "1.0.0.0/4",
+                                         "2.0.0.0/8",
+                                         "2.0.0.0/16",
+                                         "2.1.1.0/24",
+                                         "1.0.0.0/16",
+                                         "1.1.1.0/24",
+                                         "2.0.0.0/8",
+                                         ])
+
+        self.assertEqual(2**28, total)
 
 
 if __name__ == "__main__":
