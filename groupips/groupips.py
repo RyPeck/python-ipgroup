@@ -43,26 +43,47 @@ def totalAddresses(ips):
 
     overlapping_bit = False
 
-    # Need to check if any of the networks overlap, and use a different method
-    # for getting the number of unique addresses
+    # If networks overlap - handle differently
     for a, b in combinations(ips, 2):
         if a.overlaps(b):
             overlapping_bit = True
 
     if overlapping_bit:
-        super_set = set()
-        for i in ips:
-            s = set(list(i.hosts()))
-            super_set = super_set.union(s)
-
-        # Return all address... + 2 for non-usable hosts
-        return len(super_set) + 2
+        ips = _overlapping_bits(ips)
 
     for i in ips:
         total += i.num_addresses
 
     return total
 
+def _overlapping_bits(ips):
+    overlapping_bit = False
+
+    # Networks that contain others.
+    master_networks = set()
+
+    two_pair_combinations = combinations(ips, 2)
+
+    for a, b in two_pair_combinations:
+        if a.prefixlen == b.prefixlen:
+            if a == b:
+                master_networks.add(a)
+        elif a.prefixlen < b.prefixlen:
+            if a.overlaps(b):
+                master_networks.add(a)
+        else:
+            if b.overlaps(a):
+                master_networks.add(b)
+
+    # Check if there is any overlap in master_networks
+    for a, b in combinations(master_networks, 2):
+        if a.overlaps(b):
+            overlapping_bit = True
+
+    if overlapping_bit:
+        return _overlapping_bits(master_networks)
+    else:
+        return master_networks
 
 def listify_params(args):
     """
