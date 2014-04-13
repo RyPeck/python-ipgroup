@@ -90,5 +90,87 @@ class TestGroupIPs(unittest.TestCase):
 
         self.assertEqual(expected_results, group)
 
+
+class TestTotalAddresses(unittest.TestCase):
+    """
+    Tests totalAddresses function returns correct number of unique addresses
+    in various scenarios
+    """
+
+    def setUp(self):
+        pass
+
+    def test_total_address1(self):
+        self.assertEqual(8, groupips.totalAddresses("127.0.0.0/29"))
+
+    def test_total_address2(self):
+        total = groupips.totalAddresses(["192.168.1.1/16",
+                                         "127.0.0.0/16",
+                                         ])
+
+        self.assertEqual(2**17, total)
+
+    def test_total_address3(self):
+        total = groupips.totalAddresses(["192.168.1.1/16",
+                                         "127.0.0.0/28"
+                                         ])
+
+        self.assertEqual((2**16 + 2**4), total)
+
+    def test_total_address4(self):
+        total = groupips.totalAddresses(["128.151.2.0/24",
+                                         "128.151.2.0/30",
+                                         ])
+
+        self.assertEqual(2**8, total)
+
+    def test_total_address5(self):
+        total = groupips.totalAddresses(["128.151.2.0/24",
+                                         "128.151.2.0/23",
+                                         ])
+
+        self.assertEqual(2**9, total)
+
+    def test_total_address_overlapping(self):
+        """ For the scenario where networks will contain eachother. """
+        total = groupips.totalAddresses(["129.21.0.0/16",
+                                         "129.21.1.0/18",
+                                         "129.21.1.0/24",
+                                         ])
+
+        self.assertEqual(2**16, total)
+
+    def test_total_address_overlapping2(self):
+        """ For the scenario where networks will contain eachother, big networks
+        to show that the function is fast, no longer enumerating all networks.
+        """
+        total = groupips.totalAddresses(["1.0.0.0/8",
+                                         "2.0.0.0/8",
+                                         "2.0.0.0/16",
+                                         "2.1.1.0/24",
+                                         "1.0.0.0/16",
+                                         "1.1.1.0/24",
+                                         "2.0.0.0/8",
+                                         ])
+
+        self.assertEqual((2**24 + 2**24), total)
+
+    def test_total_address_overlapping3(self):
+        """ For the scenario where networks will contain eachother, big networks
+        to show that the function is fast, no longer enumerating all networks.
+        """
+        total = groupips.totalAddresses(["1.0.0.0/8",
+                                         "1.0.0.0/4",
+                                         "2.0.0.0/8",
+                                         "2.0.0.0/16",
+                                         "2.1.1.0/24",
+                                         "1.0.0.0/16",
+                                         "1.1.1.0/24",
+                                         "2.0.0.0/8",
+                                         ])
+
+        self.assertEqual(2**28, total)
+
+
 if __name__ == "__main__":
     unittest.main()
