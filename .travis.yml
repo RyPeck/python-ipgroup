@@ -6,6 +6,6 @@ env:
 install:
   - pip install coveralls
 script: 
-  coverage run tests/group_ips_test.py
+  coverage run groupips_test.py
 after_success:
   coveralls

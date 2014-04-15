@@ -1,19 +1,36 @@
 #!/usr/bin/env python3
+#
+#Copyright 2014 Ryan Peck
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Fast functions for gathering info on a group of IPv4 or IPv6 Networks.
+
+Library contains functions used to learn details and generalize about a list of
+IPv4 and IPv6 addresses and networks.
+
+Based almost exclusively on the capbilities of the ipaddress module.
 
 """
-Copyright 2014 Ryan Peck
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
-"""
-
-import collections
 import ipaddress
 
+from collections import defaultdict
 from itertools import combinations
+
+
+__version__ = '0.0.1'
 
 
 def _group_IPs(ip_objs, bits):
@@ -21,7 +38,7 @@ def _group_IPs(ip_objs, bits):
 
     super_nets = set([i.supernet(new_prefix=bits) for i in ip_objs])
 
-    group = collections.defaultdict(int)
+    group = defaultdict(int)
 
     while ip_objs != []:
         n = ip_objs.pop()
@@ -67,6 +84,7 @@ def totalAddresses(ips):
 
     return total
 
+
 def _overlapping_bits(ips):
     overlapping_bit = False
 
@@ -95,6 +113,7 @@ def _overlapping_bits(ips):
         return _overlapping_bits(master_networks)
     else:
         return master_networks
+
 
 def listify_params(args):
     """
