@@ -171,6 +171,13 @@ class TestTotalAddresses(unittest.TestCase):
 
         self.assertEqual(2**28, total)
 
+    def test_total_address_overlap_IPv6(self):
+        total = groupips.totalAddresses(['2620:008d:8000::/48',
+                                         '2620:008d:8000:e693::/64',
+                                         ])
+
+        self.assertEqual(2**80, total)
+
 
 if __name__ == "__main__":
     unittest.main()
