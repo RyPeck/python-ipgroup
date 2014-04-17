@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import collections
 import ipaddress
 
+from collections import defaultdict
+from itertools import combinations
 
 # Add a function that will identify the type of IPs and group them all
 # together - like ipaddress functions.
@@ -15,14 +16,15 @@ class _BaseGroup:
 
     """
 
-    def __init__(self, ip_objs, net_bits, t):
+    def __init__(self, ip_objs, net_bits=None, t=None):
         self.IPVersion = t
 
         self.addrs = self._listify_params(ip_objs)
 
         self.net_bits = net_bits
 
-        self.group = self._group_IPs(self.net_bits)
+        if net_bits:
+            self.group = self._group_IPs(self.net_bits)
 
     def _group_IPs(self, bits):
         """ Group IPs by the bits that match """
@@ -32,7 +34,7 @@ class _BaseGroup:
 
         ip_objs = self.addrs
 
-        group = collections.defaultdict(int)
+        group = defaultdict(int)
 
         while ip_objs != []:
             n = ip_objs.pop()
@@ -60,7 +62,11 @@ class _BaseGroup:
         for i in args:
             n = ipaddress.ip_network(i, strict=False)
 
-            assert(isinstance(n, self.IPVersion))
+            # If the IP Type is unset, use whatever comes along first
+            if self.IPVersion is not None:
+                assert(isinstance(n, self.IPVersion))
+            else:
+                self.IPVersion == type(n)
 
             new_args.append(n)
 
@@ -96,6 +102,57 @@ class _BaseGroup:
 
         return True
 
+    def _overlapping_bits(self, ips):
+        overlapping_bit = False
+
+        # Networks that contain others.
+        master_networks = set()
+
+        two_pair_combinations = combinations(ips, 2)
+
+        for a, b in two_pair_combinations:
+            if a.prefixlen == b.prefixlen:
+                if a == b:
+                    master_networks.add(a)
+            elif a.prefixlen < b.prefixlen:
+                if a.overlaps(b):
+                    master_networks.add(a)
+            else:
+                if b.overlaps(a):
+                    master_networks.add(b)
+
+        # Check if there is any overlap in master_networks
+        for a, b in combinations(master_networks, 2):
+            if a.overlaps(b):
+                overlapping_bit = True
+
+        if overlapping_bit:
+            return self._overlapping_bits(master_networks)
+        else:
+            return master_networks
+
+    def totalAddresses(self, ip_objs):
+        """ Returns the number of total unique addresses in a list of
+        networks """
+        ips = self._listify_params(ip_objs)
+
+        total = 0
+
+        overlapping_bit = False
+
+        # If networks overlap - handle differently
+        for a, b in combinations(ips, 2):
+            if a.overlaps(b):
+                overlapping_bit = True
+
+        if overlapping_bit:
+            ips = self._overlapping_bits(ips)
+
+        for i in ips:
+            total += i.num_addresses
+
+        return total
+
 
 class IPv4Group(_BaseGroup):
     """Group of IPv4 Addresses"""
@@ -109,3 +166,10 @@ class IPv6Group(_BaseGroup):
 
     def __init__(self, ip_objs, net_bits=48):
         _BaseGroup.__init__(self, ip_objs, net_bits, ipaddress._BaseV6)
+
+
+def totalAddresses(ips):
+    """ function for getting total addresses """
+    i = _BaseGroup(ips)
+
+    return i.totalAddresses(ips)
