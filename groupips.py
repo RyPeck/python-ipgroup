@@ -30,148 +30,170 @@ from collections import defaultdict
 from itertools import combinations
 
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
-def _group_IPs(ip_objs, bits):
-    """ Group IPs by the bits that match """
+class _BaseGroup:
+    """A generic group of IP Addresses/Networks
 
-    super_nets = set([i.supernet(new_prefix=bits) for i in ip_objs])
+    This class will containt version indepenent methods for grouping.
 
-    group = defaultdict(int)
+    """
 
-    while ip_objs != []:
-        n = ip_objs.pop()
-        for x in super_nets:
-            if x.overlaps(n):
-                group[str(x)] += 1
-                break
+    def __init__(self, ip_objs, net_bits=None, t=None):
+        self.IPVersion = t
 
-    # Return it to a normal dictionary
-    return dict(group)
+        self.addrs = self._listify_params(ip_objs)
+
+        self.net_bits = net_bits
+
+        if net_bits:
+            self.group = self._group_IPs(self.net_bits)
+
+    def _group_IPs(self, bits):
+        """ Group IPs by the bits that match """
+
+        self.super_nets = set([i.supernet(new_prefix=bits)
+                               for i in self.addrs])
+
+        ip_objs = self.addrs
+
+        group = defaultdict(int)
+
+        while ip_objs != []:
+            n = ip_objs.pop()
+            for x in self.super_nets:
+                if x.overlaps(n):
+                    group[str(x)] += 1
+                    break
+
+        # Return it to a normal dictionary
+        return dict(group)
+
+    def _listify_params(self, args):
+        """
+        Create a list of IP Network Objects from parameters, must be either
+        IPv4 or IPv6...
+        """
+
+        assert(self._validate_ips_param(args))
+
+        if isinstance(args, str):
+            args = [ipaddress.ip_network(args, strict=False)]
+
+        new_args = []
+
+        for i in args:
+            n = ipaddress.ip_network(i, strict=False)
+
+            # If the IP Type is unset, use whatever comes along first
+            if self.IPVersion is not None:
+                assert(isinstance(n, self.IPVersion))
+            else:
+                self.IPVersion == type(n)
+
+            new_args.append(n)
+
+        return new_args
+
+    # TODO Write tests for this
+    def _validate_ips_param(self, ips):
+        """
+        Validate that the parameters passed are types we accept.
+        """
+
+        # Acceptable inputs
+        assert(isinstance(ips, (str, list, self.IPVersion)))
+
+        # Unpack a list
+        if isinstance(ips, list):
+            for i in ips:
+                assert(isinstance(i, (str, ipaddress._IPAddressBase)))
+
+                if isinstance(i, str):
+                    assert(self._validate_IPNetwork_str(i))
+
+        return True
+
+    # TODO Write tests for this
+    # Should use ipaddress.ip_network here
+    def _validate_IPNetwork_str(self, string):
+        """ Validate that a valid IP Network string was passed """
+
+        if isinstance(string, str):
+            temp = ipaddress.ip_network(string, strict=False)
+            del temp
+
+        return True
+
+    def _overlapping_bits(self, ips):
+        overlapping_bit = False
+
+        # Networks that contain others.
+        master_networks = set()
+
+        two_pair_combinations = combinations(ips, 2)
+
+        for a, b in two_pair_combinations:
+            if a.prefixlen == b.prefixlen:
+                if a == b:
+                    master_networks.add(a)
+            elif a.prefixlen < b.prefixlen:
+                if a.overlaps(b):
+                    master_networks.add(a)
+            else:
+                if b.overlaps(a):
+                    master_networks.add(b)
+
+        # Check if there is any overlap in master_networks
+        for a, b in combinations(master_networks, 2):
+            if a.overlaps(b):
+                overlapping_bit = True
+
+        if overlapping_bit:
+            return self._overlapping_bits(master_networks)
+        else:
+            return master_networks
+
+    def totalAddresses(self, ip_objs):
+        """ Returns the number of total unique addresses in a list of
+        networks """
+        ips = self._listify_params(ip_objs)
+
+        total = 0
+
+        overlapping_bit = False
+
+        # If networks overlap - handle differently
+        for a, b in combinations(ips, 2):
+            if a.overlaps(b):
+                overlapping_bit = True
+
+        if overlapping_bit:
+            ips = self._overlapping_bits(ips)
+
+        for i in ips:
+            total += i.num_addresses
+
+        return total
 
 
-def group_IPv6s(ips, bits):
-    ip_objs = [ipaddress.IPv6Network(i) for i in ips]
-    return _group_IPs(ip_objs, bits)
+class IPv4Group(_BaseGroup):
+    """Group of IPv4 Addresses"""
+
+    def __init__(self, ip_objs, net_bits=24):
+        _BaseGroup.__init__(self, ip_objs, net_bits, ipaddress._BaseV4)
 
 
-def group_IPv4s(ips, bits):
-    """ Group IPs by the bits that match """
+class IPv6Group(_BaseGroup):
+    """Group of IPv6 Addresses"""
 
-    ip_objs = [ipaddress.IPv4Network(i) for i in ips]
-    return _group_IPs(ip_objs, bits)
+    def __init__(self, ip_objs, net_bits=48):
+        _BaseGroup.__init__(self, ip_objs, net_bits, ipaddress._BaseV6)
 
 
 def totalAddresses(ips):
-    """ Returns the number of total unique addresses in a list of networks """
-    ips = listify_params(ips)
+    """ function for getting total addresses """
+    i = _BaseGroup(ips)
 
-    total = 0
-
-    overlapping_bit = False
-
-    # If networks overlap - handle differently
-    for a, b in combinations(ips, 2):
-        if a.overlaps(b):
-            overlapping_bit = True
-
-    if overlapping_bit:
-        ips = _overlapping_bits(ips)
-
-    for i in ips:
-        total += i.num_addresses
-
-    return total
-
-
-def _overlapping_bits(ips):
-    overlapping_bit = False
-
-    # Networks that contain others.
-    master_networks = set()
-
-    two_pair_combinations = combinations(ips, 2)
-
-    for a, b in two_pair_combinations:
-        if a.prefixlen == b.prefixlen:
-            if a == b:
-                master_networks.add(a)
-        elif a.prefixlen < b.prefixlen:
-            if a.overlaps(b):
-                master_networks.add(a)
-        else:
-            if b.overlaps(a):
-                master_networks.add(b)
-
-    # Check if there is any overlap in master_networks
-    for a, b in combinations(master_networks, 2):
-        if a.overlaps(b):
-            overlapping_bit = True
-
-    if overlapping_bit:
-        return _overlapping_bits(master_networks)
-    else:
-        return master_networks
-
-
-def listify_params(args):
-    """
-    Create a list of IP Network Objects from parameters, must be either IPv4
-    or IPv6...
-    """
-    assert(validate_ips_param(args))
-
-    ipv4_bool = False
-    ipv6_bool = False
-
-    if isinstance(args, str):
-        args = [ipaddress.ip_network(args, strict=False)]
-
-    new_args = []
-
-    for i in args:
-        n = ipaddress.ip_network(i, strict=False)
-
-        if isinstance(n, ipaddress.IPv4Network):
-            ipv4_bool = True
-        if isinstance(n, ipaddress.IPv6Network):
-            ipv6_bool = True
-
-        # Can't have both types in a list...
-        assert(ipv6_bool ^ ipv4_bool)
-
-        new_args.append(n)
-
-    return new_args
-
-
-# TODO Write tests for this
-def validate_ips_param(ips):
-    """
-    Validate that the parameters passed are types we accept.
-    """
-
-    # Acceptable inputs
-    assert(isinstance(ips, (str, list, ipaddress.IPv4Network)))
-
-    # Unpack a list
-    if isinstance(ips, list):
-        for i in ips:
-            assert(isinstance(i, (str, ipaddress._BaseNetwork)))
-
-            if isinstance(i, str):
-                assert(validate_IPNetwork_str(i))
-
-    return True
-
-
-# TODO Write tests for this
-# Should use ipaddress.ip_network here
-def validate_IPNetwork_str(string):
-    """ Validate that a valid IP Network string was passed """
-    if isinstance(string, str):
-        temp = ipaddress.ip_network(string, strict=False)
-        del temp
-
-    return True
+    return i.totalAddresses(ips)

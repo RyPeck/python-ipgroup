@@ -25,9 +25,9 @@ class TestGroupIPs(unittest.TestCase):
                             "127.2.0.0/16": 2,
                             }
 
-        group = groupips.group_IPv4s(IPs, 16)
+        a = groupips.IPv4Group(IPs, 16)
 
-        self.assertEqual(expected_results, group)
+        self.assertEqual(expected_results, a.group)
 
     def test_group2(self):
         IPs = ["127.0.0.1",
@@ -46,9 +46,9 @@ class TestGroupIPs(unittest.TestCase):
                             "127.2.1.0/24": 1,
                             }
 
-        group = groupips.group_IPv4s(IPs, 24)
+        b = groupips.IPv4Group(IPs, 24)
 
-        self.assertEqual(expected_results, group)
+        self.assertEqual(expected_results, b.group)
 
     def test_group3(self):
         """ 'Random' test """
@@ -65,9 +65,9 @@ class TestGroupIPs(unittest.TestCase):
 
         expected_results = {("129.21.0.0/%s" % random_cidr): random_int}
 
-        group = groupips.group_IPv4s(IPs, random_cidr)
+        c = groupips.IPv4Group(IPs, random_cidr)
 
-        self.assertEqual(expected_results, group)
+        self.assertEqual(expected_results, c.group)
 
     def test_IPv6(self):
         """ 'Random' test """
@@ -86,9 +86,9 @@ class TestGroupIPs(unittest.TestCase):
         expected_results = {("2607:f8b0:4009:803::/%s" % random_cidr):
                             random_int}
 
-        group = groupips.group_IPv6s(IPs, random_cidr)
+        d = groupips.IPv6Group(IPs, random_cidr)
 
-        self.assertEqual(expected_results, group)
+        self.assertEqual(expected_results, d.group)
 
 
 class TestTotalAddresses(unittest.TestCase):
