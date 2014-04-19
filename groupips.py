@@ -40,15 +40,28 @@ class _BaseGroup:
 
     """
 
-    def __init__(self, ip_objs, net_bits=None, t=None):
+    def __init__(self, ip_objs, net_bits=None, t=None, cache=True):
         self.IPVersion = t
 
         self.addrs = self._listify_params(ip_objs)
+
+        if cache:
+            self.addrs_cache = self.addrs.copy()
 
         self.net_bits = net_bits
 
         if net_bits:
             self.group = self._group_IPs(self.net_bits)
+
+    def reGroup(self, bits):
+        """Regroup the IP addresses according to a new CIDR Prefix"""
+
+        self.old_group = self.group
+        self.addrs = self.addrs_cache
+
+        new_group = self._group_IPs(bits)
+
+        self.group = dict(new_group)
 
     def _group_IPs(self, bits):
         """ Group IPs by the bits that match """

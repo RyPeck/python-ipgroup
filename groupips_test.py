@@ -90,6 +90,29 @@ class TestGroupIPs(unittest.TestCase):
 
         self.assertEqual(expected_results, d.group)
 
+    def test_reGroup(self):
+        IPs = ["127.0.0.1",
+               "127.1.0.1",
+               "127.1.1.1",
+               ]
+
+        expected_results1 = {"127.0.0.0/24": 1,
+                             "127.1.0.0/24": 1,
+                             "127.1.1.0/24": 1,
+                             }
+
+        g = groupips.IPv4Group(IPs, 24)
+
+        self.assertEqual(expected_results1, g.group)
+
+        expected_results2 = {"127.0.0.0/16": 1,
+                             "127.1.0.0/16": 2,
+                             }
+
+        g.reGroup(16)
+
+        self.assertEqual(expected_results2, g.group)
+
 
 class TestTotalAddresses(unittest.TestCase):
     """
