@@ -13,14 +13,15 @@ Script requires Python 3.3 or 3.4, which both include the [ipaddress manipulatio
 >>> ips = ["129.21.3.17", "129.21.206.5", 
            "8.8.8.8", "8.8.4.4", "192.168.1.1",
            "192.168.255.1", "172.16.5.6", "172.17.20.1"]
->>> 
->>> pprint(groupips.group_IPs(ips, 16))
+>>> example1 = groupips.IPv4Group(ips, 16)
+>>> pprint(example1.group)
 {'129.21.0.0/16': 2,
  '172.16.0.0/16': 1,
  '172.17.0.0/16': 1,
  '192.168.0.0/16': 2,
  '8.8.0.0/16': 2}
->>> pprint(groupips.group_IPs(ips, 12))
+>>> example2 = groupips.IPv4Group(ips, 12)
+>>> pprint(example2.group)
 {'129.16.0.0/12': 2, 
  '172.16.0.0/12': 2, 
  '192.160.0.0/12': 2, 
