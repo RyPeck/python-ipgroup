@@ -1,12 +1,18 @@
 language: python
 python:
-  - "3.3"
-  - "3.4"
+- '3.3'
+- '3.4'
 env:
-  - PYTHONPATH=.
+- PYTHONPATH=.
 install:
-  - pip install coveralls
-script: 
-  coverage run groupips_test.py
-after_success:
-  coveralls
+- pip install coveralls
+script: coverage run groupips_test.py
+after_success: coveralls
+deploy:
+  provider: pypi
+  user: rypeck
+  password:
+    secure: iqm1734+UUcNYK654hKlcVEpom+nciN7mAW/lUqzdpEcqQIfM36khS0QisucjKST1nVaX6wLn8x/JTobJMXZW4nZEfkiOSFYgRmKgzoH/Dv5slXis+09/8rwEE5ZA9XC60wSin/i3ezwEgxwySye3oQIjNsqNEz2SNXb6hKHKqA=
+  on:
+    tags: true
+    repo: RyPeck/python-ipgroup
