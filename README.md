@@ -1,7 +1,8 @@
 IP Grouping Python
 ==================
 [![Build
-Status](https://travis-ci.org/RyPeck/IP-Grouping-Python.png?branch=master)](https://travis-ci.org/RyPeck/IP-Grouping-Python) [![Coverage Status](https://coveralls.io/repos/RyPeck/IP-Grouping-Python/badge.png)](https://coveralls.io/r/RyPeck/IP-Grouping-Python)
+Status](https://travis-ci.org/RyPeck/python-ipgroup.svg?branch=master)](https://travis-ci.org/RyPeck/python-ipgroup) [![Coverage
+Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://coveralls.io/r/RyPeck/python-ipgroup)
 
 ## Usage
 
