@@ -16,14 +16,14 @@
 
 from distutils.core import setup
 
-import groupips
+import ipgroup
 
 
 setup(
-    name='groupips',
+    name='ipgroup',
     maintainer='Ryan Peck',
     maintainer_email='ryan@rypeck.com',
-    version=groupips.__version__,
+    version=ipgroup.__version__,
     url='https://github.com/RyPeck/IP-Grouping-Python',
     license='Apache License, Version 2.0',
     classifiers=[
@@ -38,5 +38,5 @@ setup(
         'Topic :: System :: Networking',
         ],
     description='Functions gathering info on a group of IPv4 or IPv6 Networks',
-    py_modules=['groupips'],
+    py_modules=['ipgroup'],
 )

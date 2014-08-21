@@ -4,7 +4,7 @@ import ipaddress
 import random
 import unittest
 
-import groupips
+import ipgroup
 
 
 class TestGroupIPs(unittest.TestCase):
@@ -25,7 +25,7 @@ class TestGroupIPs(unittest.TestCase):
                             "127.2.0.0/16": 2,
                             }
 
-        a = groupips.IPv4Group(IPs, 16)
+        a = ipgroup.IPv4Group(IPs, 16)
 
         self.assertEqual(expected_results, a.group)
 
@@ -46,7 +46,7 @@ class TestGroupIPs(unittest.TestCase):
                             "127.2.1.0/24": 1,
                             }
 
-        b = groupips.IPv4Group(IPs, 24)
+        b = ipgroup.IPv4Group(IPs, 24)
 
         self.assertEqual(expected_results, b.group)
 
@@ -65,7 +65,7 @@ class TestGroupIPs(unittest.TestCase):
 
         expected_results = {("129.21.0.0/%s" % random_cidr): random_int}
 
-        c = groupips.IPv4Group(IPs, random_cidr)
+        c = ipgroup.IPv4Group(IPs, random_cidr)
 
         self.assertEqual(expected_results, c.group)
 
@@ -86,7 +86,7 @@ class TestGroupIPs(unittest.TestCase):
         expected_results = {("2607:f8b0:4009:803::/%s" % random_cidr):
                             random_int}
 
-        d = groupips.IPv6Group(IPs, random_cidr)
+        d = ipgroup.IPv6Group(IPs, random_cidr)
 
         self.assertEqual(expected_results, d.group)
 
@@ -101,7 +101,7 @@ class TestGroupIPs(unittest.TestCase):
                              "127.1.1.0/24": 1,
                              }
 
-        g = groupips.IPv4Group(IPs, 24)
+        g = ipgroup.IPv4Group(IPs, 24)
 
         self.assertEqual(expected_results1, g.group)
 
@@ -124,31 +124,31 @@ class TestTotalAddresses(unittest.TestCase):
         pass
 
     def test_total_address1(self):
-        self.assertEqual(8, groupips.totalAddresses("127.0.0.0/29"))
+        self.assertEqual(8, ipgroup.totalAddresses("127.0.0.0/29"))
 
     def test_total_address2(self):
-        total = groupips.totalAddresses(["192.168.1.1/16",
+        total = ipgroup.totalAddresses(["192.168.1.1/16",
                                          "127.0.0.0/16",
                                          ])
 
         self.assertEqual(2**17, total)
 
     def test_total_address3(self):
-        total = groupips.totalAddresses(["192.168.1.1/16",
+        total = ipgroup.totalAddresses(["192.168.1.1/16",
                                          "127.0.0.0/28"
                                          ])
 
         self.assertEqual((2**16 + 2**4), total)
 
     def test_total_address4(self):
-        total = groupips.totalAddresses(["128.151.2.0/24",
+        total = ipgroup.totalAddresses(["128.151.2.0/24",
                                          "128.151.2.0/30",
                                          ])
 
         self.assertEqual(2**8, total)
 
     def test_total_address5(self):
-        total = groupips.totalAddresses(["128.151.2.0/24",
+        total = ipgroup.totalAddresses(["128.151.2.0/24",
                                          "128.151.2.0/23",
                                          ])
 
@@ -156,7 +156,7 @@ class TestTotalAddresses(unittest.TestCase):
 
     def test_total_address_overlapping(self):
         """ For the scenario where networks will contain eachother. """
-        total = groupips.totalAddresses(["129.21.0.0/16",
+        total = ipgroup.totalAddresses(["129.21.0.0/16",
                                          "129.21.1.0/18",
                                          "129.21.1.0/24",
                                          ])
@@ -167,7 +167,7 @@ class TestTotalAddresses(unittest.TestCase):
         """ For the scenario where networks will contain eachother big networks
         to show that the function is fast, no longer enumerating all networks.
         """
-        total = groupips.totalAddresses(["1.0.0.0/8",
+        total = ipgroup.totalAddresses(["1.0.0.0/8",
                                          "2.0.0.0/8",
                                          "2.0.0.0/16",
                                          "2.1.1.0/24",
@@ -182,7 +182,7 @@ class TestTotalAddresses(unittest.TestCase):
         """ For the scenario where networks will contain eachother big networks
         to show that the function is fast, no longer enumerating all networks.
         """
-        total = groupips.totalAddresses(["1.0.0.0/8",
+        total = ipgroup.totalAddresses(["1.0.0.0/8",
                                          "1.0.0.0/4",
                                          "2.0.0.0/8",
                                          "2.0.0.0/16",
@@ -195,7 +195,7 @@ class TestTotalAddresses(unittest.TestCase):
         self.assertEqual(2**28, total)
 
     def test_total_address_overlap_IPv6(self):
-        total = groupips.totalAddresses(['2620:008d:8000::/48',
+        total = ipgroup.totalAddresses(['2620:008d:8000::/48',
                                          '2620:008d:8000:e693::/64',
                                          ])
 

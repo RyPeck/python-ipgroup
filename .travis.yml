@@ -6,7 +6,7 @@ env:
 - PYTHONPATH=.
 install:
 - pip install coveralls
-script: coverage run groupips_test.py
+script: coverage run ipgroup_test.py
 after_success: coveralls
 deploy:
   provider: pypi
