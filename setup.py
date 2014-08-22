@@ -24,7 +24,7 @@ setup(
     maintainer='Ryan Peck',
     maintainer_email='ryan@rypeck.com',
     version=ipgroup.__version__,
-    url='https://github.com/RyPeck/IP-Grouping-Python',
+    url='https://github.com/RyPeck/python-ipgroup',
     license='Apache License, Version 2.0',
     classifiers=[
         'Development Status :: 1 - Planning',
