@@ -2,7 +2,7 @@ IP Grouping Python
 ==================
 [![Build
 Status](https://travis-ci.org/RyPeck/python-ipgroup.svg?branch=master)](https://travis-ci.org/RyPeck/python-ipgroup) [![Coverage
-Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://coveralls.io/r/RyPeck/python-ipgroup)
+Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://coveralls.io/r/RyPeck/python-ipgroup) [![Downloads](https://pypip.in/download/ipgroup/badge.svg)](https://pypi.python.org/pypi/ipgroup/ ) [![License](https://pypip.in/license/ipgroup/badge.svg)](https://pypi.python.org/pypi/ipgroup/) [![Supported Python versions](https://pypip.in/py_versions/ipgroup/badge.svg)](https://pypi.python.org/pypi/ipgroup/) [![Development Status](https://pypip.in/status/ipgroup/badge.svg)](https://pypi.python.org/pypi/ipgroup/)
 
 ## Usage
 
