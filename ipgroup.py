@@ -162,6 +162,7 @@ class _BaseGroup:
         for a, b in combinations(master_networks, 2):
             if a.overlaps(b):
                 overlapping_bit = True
+                break
 
         if overlapping_bit:
             return self._overlapping_bits(master_networks)
@@ -181,6 +182,7 @@ class _BaseGroup:
         for a, b in combinations(ips, 2):
             if a.overlaps(b):
                 overlapping_bit = True
+                break
 
         if overlapping_bit:
             ips = self._overlapping_bits(ips)
