@@ -6,7 +6,7 @@ Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://cov
 
 ## Usage
 
-Script requires Python 3.3 or 3.4, which both include the [ipaddress manipulation library](http://docs.python.org/3.3/library/ipaddress) in the standard release.
+Script requires the [ipaddress manipulation library](https://docs.python.org/3/library/ipaddress) which is in the standard libray.
 
 ~~~
 >>> import ipgroup
