@@ -18,7 +18,9 @@ deploy:
   provider: pypi
   user: rypeck
   password:
-    secure: iqm1734+UUcNYK654hKlcVEpom+nciN7mAW/lUqzdpEcqQIfM36khS0QisucjKST1nVaX6wLn8x/JTobJMXZW4nZEfkiOSFYgRmKgzoH/Dv5slXis+09/8rwEE5ZA9XC60wSin/i3ezwEgxwySye3oQIjNsqNEz2SNXb6hKHKqA=
+    secure: ITMC3cQXglwDp8jvQxyduOwWdHtu5lT5YSuSkw1AwD4LxnWcH+sgnOM6+USAjS9ug43DvzuRHZ6v3auMcZ2tKwWLceaahSHzIsZOcUe5mPp/fXCqkxwLnT+W++LsBCQUajo6aGIReKOo+q9CdQcSzpyCvgo8xLNX/syXwPkrHJ4=
   on:
+    branch: master
     tags: true
+    python: 3.6
     repo: RyPeck/python-ipgroup
