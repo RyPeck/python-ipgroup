@@ -40,3 +40,5 @@ nosetests.xml
 
 # Ignore ,cover files from coverage tool.
 *,cover
+
+.idea/
