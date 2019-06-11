@@ -6,7 +6,7 @@ Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://cov
 
 ## Usage
 
-~~~
+```
 >>> import ipgroup
 >>> from pprint import pprint
 >>> ips = ["129.21.3.17", "129.21.206.5", 
@@ -34,4 +34,4 @@ Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://cov
 ...                                  "1.0.0.0/16",
 >>> total
 268435456
-~~~
+```
