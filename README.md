@@ -6,8 +6,6 @@ Status](https://coveralls.io/repos/RyPeck/python-ipgroup/badge.png)](https://cov
 
 ## Usage
 
-Script requires the [ipaddress manipulation library](https://docs.python.org/3/library/ipaddress) which is in the standard libray.
-
 ~~~
 >>> import ipgroup
 >>> from pprint import pprint
