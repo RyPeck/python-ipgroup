@@ -116,12 +116,16 @@ class _BaseGroup:
         """
 
         # Acceptable inputs
-        assert(isinstance(ips, (str, list, self.IPVersion)))
+        valid_types = (str, list)
+        if self.IPVersion is not None:
+            valid_types = valid_types + self.IPVersion
+        assert(isinstance(ips, valid_types))
 
         # Unpack a list
         if isinstance(ips, list):
             for i in ips:
-                assert(isinstance(i, (str, ipaddress._IPAddressBase)))
+                assert(isinstance(i, (str, ipaddress.IPv4Address, ipaddress.IPv6Address,
+                                      ipaddress.IPv4Network, ipaddress.IPv6Network)))
 
                 if isinstance(i, str):
                     assert(self._validate_IPNetwork_str(i))
@@ -197,14 +201,14 @@ class IPv4Group(_BaseGroup):
     """Group of IPv4 Addresses"""
 
     def __init__(self, ip_objs, net_bits=24):
-        _BaseGroup.__init__(self, ip_objs, net_bits, ipaddress._BaseV4)
+        _BaseGroup.__init__(self, ip_objs, net_bits, (ipaddress.IPv4Network, ipaddress.IPv4Address))
 
 
 class IPv6Group(_BaseGroup):
     """Group of IPv6 Addresses"""
 
     def __init__(self, ip_objs, net_bits=48):
-        _BaseGroup.__init__(self, ip_objs, net_bits, ipaddress._BaseV6)
+        _BaseGroup.__init__(self, ip_objs, net_bits, (ipaddress.IPv6Network, ipaddress.IPv6Address))
 
 
 def totalAddresses(ips):

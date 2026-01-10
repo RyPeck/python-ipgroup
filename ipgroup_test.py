@@ -61,7 +61,7 @@ class TestGroupIPs(unittest.TestCase):
         # So out sample size is never bigger than the population of hosts
         random_int = random.randint(1, 2**(32 - random_cidr - 1))
 
-        IPs = random.sample(set(network.hosts()), random_int)
+        IPs = random.sample(list(network.hosts()), random_int)
 
         expected_results = {("129.21.0.0/%s" % random_cidr): random_int}
 
@@ -81,7 +81,7 @@ class TestGroupIPs(unittest.TestCase):
         # So out sample size is never bigger than the population of hosts
         random_int = random.randint(1, 2**(128 - random_cidr - 1))
 
-        IPs = random.sample(set(network.hosts()), random_int)
+        IPs = random.sample(list(network.hosts()), random_int)
 
         expected_results = {("2607:f8b0:4009:803::/%s" % random_cidr):
                             random_int}
