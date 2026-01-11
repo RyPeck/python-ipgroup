@@ -42,3 +42,10 @@ nosetests.xml
 *,cover
 
 .idea/
+
+# Virtual environments
+.venv/
+venv/
+
+# uv lock file (not needed for libraries)
+uv.lock

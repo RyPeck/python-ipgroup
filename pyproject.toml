@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ipgroup"
+version = "0.0.5"
+description = "Functions to gather info on a group of IPv4 or IPv6 Networks"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+authors = [
+    { name = "Ryan Peck", email = "ryan@rypeck.com" },
+]
+maintainers = [
+    { name = "Ryan Peck", email = "ryan@rypeck.com" },
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet",
+    "Topic :: Internet :: Log Analysis",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: System :: Networking",
+    "Topic :: Utilities",
+]
+
+[project.urls]
+Homepage = "https://github.com/RyPeck/python-ipgroup"
+Repository = "https://github.com/RyPeck/python-ipgroup"
+Issues = "https://github.com/RyPeck/python-ipgroup/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ipgroup.py"]
